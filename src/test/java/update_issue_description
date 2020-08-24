@@ -1,0 +1,29 @@
+import com.atlassian.jira.component.ComponentAccessor
+import com.atlassian.jira.issue.Issue
+import com.atlassian.jira.issue.ModifiedValue
+import com.atlassian.jira.issue.util.DefaultIssueChangeHolder
+
+//updates the issue description with the issue last comment
+
+// the issue key of the parent issue
+final String parentIssueKey = "JRA-1"
+
+// the name of the custom field to update
+final customFieldName = 'Description'
+
+// the new value of the field
+final newValue = getCustomFieldValue("Comment")
+
+def parentIssue = ComponentAccessor.issueManager.getIssueByCurrentKey(parentIssueKey)
+assert parentIssue : "Could not find parent issue with key $parentIssueKey"
+
+def customFieldManager = ComponentAccessor.customFieldManager
+def issue = event.issue
+
+def customField = customFieldManager.getCustomFieldObjects(issue).findByName(customFieldName)
+assert customField : "Could not find custom field with name $customFieldName"
+
+customField.updateValue(null, issue, new ModifiedValue(issue.getCustomFieldValue(customField), newValue), new DefaultIssueChangeHolder())
+
+
+

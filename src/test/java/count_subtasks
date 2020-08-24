@@ -1,0 +1,29 @@
+import com.atlassian.jira.component.ComponentAccessor
+import com.atlassian.jira.issue.Issue
+
+//count the number of sub-tasks in an issue
+
+// the issue key of the parent issue
+final String parentIssueKey = "JRA-1"
+
+// The linked issues with that issue type will used
+final linkedIssueType = "Bug"
+
+// the issue type for the new issue - should be of type subtask
+final customFieldName = "Sub-Task"
+
+def parentIssue = ComponentAccessor.issueManager.getIssueByCurrentKey(parentIssueKey)
+assert parentIssue : "Could not find parent issue with key $parentIssueKey"
+
+def linkedIssues = ComponentAccessor.issueLinkManager.getOutwardLinks(issue.id).findAll { it.destinationObject.issueType.name == linkedIssueType }
+if (!linkedIssues) {
+    return null
+}
+
+def customField = ComponentAccessor.customFieldManager.getCustomFieldObjects(linkedIssues.first().destinationObject).findByName(customFieldName)
+if (!customField) {
+    log.debug "Custom field is not configured for that context"
+    return null
+}
+
+linkedIssues*.destinationObject.sum { Issue it -> it.getCustomFieldValue(customField) ?: 0 }
