@@ -1,0 +1,12 @@
+General Introduction:
+Welcome to my GitHub repository. To summarise, this repository contains custom scripts for adaptavist. The scripts are divided into 2 Scripted Fields and a Custom Listener script.
+
+---- Scope ----
+The adaptavist files are mapped to the following issues:
+1) Calculate_values is mapped to "A scripted field that calculates a value based on issue fields; (Tip: Create two
+number fields"
+2) Count_subtasks is mapped to "A scripted field that can count the number of sub-tasks in an issue;"
+3) Update_issue_description is mapped to "A custom listener script that updates the issue description with the issue last
+comment;"
+
+The files are located at ./src/test/java/
